@@ -1,0 +1,35 @@
+extends layout 
+
+block content
+  h4 Serial Number: #{sample.serialNumber}
+
+  p #[strong Owner:] #{sample.owner}
+  p #[strong Manufactured Date:] #{sample.manufacturedDate_formatted}
+  p #[strong Manufacturer:] #{sample.manufacturer}
+  p #[strong Purchase Date:] #{sample.purchaseDate_formatted}
+
+  div(style='margin-left:20px;margin-top:20px')
+  h4 Tests
+
+  table.table.table-striped.table-bordered
+    tr 
+      th Date 
+      th Result
+      th Tester
+  
+    each val in sampleTests
+      tr 
+        td 
+          a(href=sample.url + val.url) #{val.testDate_formatted}
+        td 
+          if val.result=='Pass'
+            strong.text-success #{val.result}
+          else if val.result=='Fail'
+            strong.text-danger #{val.result}
+          else
+            strong.text-warning #{val.result}
+        td #{val.tester}
+    else
+      p There are no tests listed for this sample.
+  
+  a.btn.btn-primary(href=sample.url + '/sampletest/create' style='margin:10px 0') Create Test

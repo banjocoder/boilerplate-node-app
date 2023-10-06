@@ -3,17 +3,17 @@ var { DateTime } = require('luxon') ;
 
 var Schema = mongoose.Schema;
 
-var PipeTestSchema = new Schema(
+var sampleTestSchema = new Schema(
   {
     tester:   {type: String, required: true},
     testDate:  {type: Date, required: true},
     result: {type: String, required: true, enum: ['Pass', 'Fail']},
-    pipeId: {type: Schema.Types.ObjectId, required:true, ref: 'PipeID'},
+    sampleId: {type: Schema.Types.ObjectId, required:true, ref: 'sampleID'},
     files: [{type: Schema.Types.ObjectId, required:false, ref: 'Files'}]
   }
 );
 
-PipeTestSchema
+sampleTestSchema
 .virtual('testDate_formatted')
 .get(function(){
   return this.testDate 
@@ -21,11 +21,11 @@ PipeTestSchema
     : '';
 });
 
-PipeTestSchema
+sampleTestSchema
 .virtual('url')
 .get(function(){
-  return '/pipeTest/' + this._id;
+  return '/sampleTest/' + this._id;
 });
 
 //Export model
-module.exports = mongoose.model('PipeTest', PipeTestSchema);
+module.exports = mongoose.model('sampleTest', sampleTestSchema);

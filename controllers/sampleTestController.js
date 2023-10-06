@@ -1,48 +1,48 @@
-// Include pipe model here
+// Include sample model here
 var async = require('async');
 const { body,validationResult } = require('express-validator');
-var Pipe = require('../models/pipe');
-var PipeTest = require('../models/pipeTest');
-var PipeFile = require('../models/pipeFile')
+var sample = require('../models/sample');
+var sampleTest = require('../models/sampleTest');
+var sampleFile = require('../models/sampleFile')
 
-/* GET pipe test detail*/
-exports.pipeTest_detail = function(req, res, next){
+/* GET sample test detail*/
+exports.sampleTest_detail = function(req, res, next){
     async.parallel({
-      pipeTest_item: function(callback) {
-          PipeTest.findById(req.params.testId)
+      sampleTest_item: function(callback) {
+          sampleTest.findById(req.params.testId)
           .exec(callback);
       },
-      pipe_item: function(callback) {
-          Pipe.find({'serialNumber':req.params.pipeId})
+      sample_item: function(callback) {
+          sample.find({'serialNumber':req.params.sampleId})
           .exec(callback);
       },
       files: function(callback){
-          PipeFile.find({'pipeTestId':req.params.testId}, 'name _id')
+          sampleFile.find({'sampleTestId':req.params.testId}, 'name _id')
           .exec(callback);
       }
   }, function(err, results) {
-      res.render('pipeTest_detail', { title: 'Pipe Test', error: err, data: results });
+      res.render('sampleTest_detail', { title: 'sample Test', error: err, data: results });
   });  
 };
 
-/* GET pipe test create*/
-exports.pipeTest_create_get = function(req, res){
-  Pipe.find({'serialNumber': req.params.id})
-  .exec(function (err, pipe_item) {
+/* GET sample test create*/
+exports.sampleTest_create_get = function(req, res){
+  sample.find({'serialNumber': req.params.id})
+  .exec(function (err, sample_item) {
     if (err) { return next(err); }
     // Successful, so render.
-    res.render('pipeTest_form', {title: 'Create Pipe Test', pipe: pipe_item[0]});
+    res.render('sampleTest_form', {title: 'Create sample Test', sample: sample_item[0]});
   });
 };
 
-/* POST pipe test create*/
-exports.pipeTest_create_post = [
+/* POST sample test create*/
+exports.sampleTest_create_post = [
 
   // Validate and sanitise fields.
   body('tester', 'Tester must be specified').trim().isLength({ min: 1 }).escape(),
   body('testDate', 'Invalid date').optional({ checkFalsy: true }).isISO8601().toDate(),
   body('result').escape(),
-  body('pipeTestFiles').escape(),
+  body('sampleTestFiles').escape(),
 
   // Process request after validation and sanitization.
   (req, res, next) => {
@@ -52,11 +52,11 @@ exports.pipeTest_create_post = [
 
       var fileArray = [];
       
-      if(req.files.pipeTestFiles.length > 1){
+      if(req.files.sampleTestFiles.length > 1){
       
           // TODO: allow for only 1 file
-          req.files.pipeTestFiles.forEach(file =>{
-              var newFile = new PipeFile({
+          req.files.sampleTestFiles.forEach(file =>{
+              var newFile = new sampleFile({
                   name: file.name,
                   data: file.data,
                   contentType:file.mimetype
@@ -65,30 +65,30 @@ exports.pipeTest_create_post = [
               fileArray.push(newFile);
           });
       }else{
-        var newFile = new PipeFile({
-            name: req.files.pipeTestFiles.name,
-            data: req.files.pipeTestFiles.data,
-            contentType:req.files.pipeTestFiles.mimetype
+        var newFile = new sampleFile({
+            name: req.files.sampleTestFiles.name,
+            data: req.files.sampleTestFiles.data,
+            contentType:req.files.sampleTestFiles.mimetype
         });
         fileArray.push(newFile);
       }
       
-      var newPipeTest = new PipeTest({
+      var newsampleTest = new sampleTest({
           tester: req.body.tester,
           testDate: req.body.testDate,
           result: req.body.result,
-          pipeId: req.body.pipeId,
+          sampleId: req.body.sampleId,
           files: fileArray
       });
 
 
       if (!errors.isEmpty()) {
           // There are errors. Render form again with sanitized values and error messages.
-          Pipe.find({'serialNumber': req.params.serialNumber})
-              .exec(function (err, pipe_item) {
+          sample.find({'serialNumber': req.params.serialNumber})
+              .exec(function (err, sample_item) {
                   if (err) { return next(err); }
                   // Successful, so render.
-                  res.render('pipeTest_form', { title: 'Create Pipe Test', pipe: pipe_item, errors: errors.array(), pipeTest: newPipeTest});
+                  res.render('sampleTest_form', { title: 'Create sample Test', sample: sample_item, errors: errors.array(), sampleTest: newsampleTest});
                 });
           return;
       }
@@ -97,14 +97,14 @@ exports.pipeTest_create_post = [
           
 
           // Data from form is valid.
-        newPipeTest.save(function (err,pipeTest) {
+        newsampleTest.save(function (err,sampleTest) {
             if (err) { return next(err); }
 
             // Add all files
             fileArray.forEach(file=>{
             
                 // Add new id
-                file.pipeTestId = pipeTest._id
+                file.sampleTestId = sampleTest._id
                 
                 // save file
                 file.save(function (err) {
@@ -113,7 +113,7 @@ exports.pipeTest_create_post = [
             });
 
             // Successful - redirect to new record.
-            res.redirect('/pipelist');
+            res.redirect('/samplelist');
         });
       }
   }

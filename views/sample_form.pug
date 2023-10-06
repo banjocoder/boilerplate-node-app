@@ -1,0 +1,38 @@
+extends layout
+
+block content
+  h1=title
+
+  form(method='POST' action='')
+    
+    //- Serial Number
+    div.form-group 
+      label(for='serialNumber') Serial Number:
+      input#serialNumber.form-control(type='text' placeholder='sample Serial Number...' name='serialNumber' required='true' value=(undefined===sample ? '' : sample.serialNumber))
+    
+    //- Manufactured Date
+    div.form-group
+    label(for='manufacturedDate') Manufactured Date:
+    input#manufacturedDate.form-control(type='date' name='manufacturedDate' required='true' value=(undefined===sample ? '' : sample.manufacturedDate))
+
+    //- Manufacturer
+    div.form-group 
+      label(for='manufacturer') Manufacturer:
+      input#manufacturer.form-control(type='text' placeholder='Manufacturer Name...' name='manufacturer' value=(undefined===sample ? '' : sample.manufacturer))
+    
+    //- Purchase Date
+    div.form-group
+      label(for='purchaseDate') Purchase Date:
+      input#purchaseDate.form-control(type='date' name='purchaseDate' value=(undefined===sample ? '' : sample.purchaseDate))
+
+    //- Owner
+    div.form-group 
+      label(for='owner') Owner:
+      input#owner.form-control(type='text' placeholder='Owner...' name='owner' required='true' value=(undefined===sample ? '' : sample.owner))
+
+    button.btn.btn-primary(type='submit' style='margin:10px 0') Submit
+
+  if errors
+    ul
+      for error in errors
+        li!= error.msg

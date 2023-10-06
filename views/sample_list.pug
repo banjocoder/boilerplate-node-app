@@ -10,11 +10,11 @@ block content
         th Owner 
         th Manufactured 
     tbody 
-      each val in pipe_list 
+      each val in sample_list 
         tr 
           td 
             a(href=val.url) #{val.serialNumber} 
           td #{val.owner}
           td #{val.manufacturedDate_formatted}
   p
-    a.btn.btn-primary(href='../pipe/create' style='margin:10px 0')  Create Pipe
+    a.btn.btn-primary(href='../sample/create' style='margin:10px 0')  Create sample

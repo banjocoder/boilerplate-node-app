@@ -1,8 +1,8 @@
-// Include pipe model here
+// Include sample model here
 var async = require('async');
 const { body,validationResult } = require('express-validator');
-var Pipe = require('../models/pipe');
-var PipeTest = require('../models/pipeTest');
+var sample = require('../models/sample');
+var sampleTest = require('../models/sampleTest');
 
 /* GET home page. */
 exports.index = function(req, res) {
@@ -10,56 +10,56 @@ exports.index = function(req, res) {
     res.render('index', { title: 'Texas Iron Trackers'});
 };
 
-/* GET pipe list*/
-exports.pipe_list = function(req, res){
-    console.log('Retrieving Pipe List')
-    Pipe.find()
-      .exec(function (err, list_pipes) {
+/* GET sample list*/
+exports.sample_list = function(req, res){
+    console.log('Retrieving sample List')
+    sample.find()
+      .exec(function (err, list_samples) {
         if (err) { return next(err); }
         //Successful, so render
 
-        res.render('pipe_list', { title: 'Pipe List', pipe_list: list_pipes });
+        res.render('sample_list', { title: 'sample List', sample_list: list_samples });
         });
 };
 
-/* GET pipe detail*/
-exports.pipe_detail = function(req, res, next){
+/* GET sample detail*/
+exports.sample_detail = function(req, res, next){
     async.waterfall([
         function(callback){
-            Pipe.find({'serialNumber':req.params.id})
+            sample.find({'serialNumber':req.params.id})
             .exec(callback);
         },
-        function(pipe,callback){
-            PipeTest.find({'pipeId':pipe})
-            .then(tests =>  {callback(null,pipe,tests)});
+        function(sample,callback){
+            sampleTest.find({'sampleId':sample})
+            .then(tests =>  {callback(null,sample,tests)});
         }
-    ], function(err,pipe_object,tests) {
+    ], function(err,sample_object,tests) {
         if (err) { return next(err); }
-        if (pipe_object==null) { // No results.
-            var err = new Error('Pipe not found');
+        if (sample_object==null) { // No results.
+            var err = new Error('sample not found');
             err.status = 404;
             return next(err);
         }
 
         // Successful, so render.
-        res.render('pipe_detail', { title: pipe_object[0].serialNumber, pipe: pipe_object[0], pipeTests: tests});
-        //res.send(pipe + tests);
+        res.render('sample_detail', { title: sample_object[0].serialNumber, sample: sample_object[0], sampleTests: tests});
+        //res.send(sample + tests);
     });
 };
 
-/* GET pipe create*/
-exports.pipe_create_get = function(req, res){
-    Pipe.find({},'PipeId')
-    .exec(function (err, pipes) {
+/* GET sample create*/
+exports.sample_create_get = function(req, res){
+    sample.find({},'sampleId')
+    .exec(function (err, samples) {
       if (err) { return next(err); }
       // Successful, so render.
-      res.render('pipe_form', {title: 'Create Pipe', pipe_list: pipes});
+      res.render('sample_form', {title: 'Create sample', sample_list: samples});
     });
 };
 
 
-/* POST pipe create*/
-exports.pipe_create_post = [
+/* POST sample create*/
+exports.sample_create_post = [
 
     // Validate and sanitise fields.
     body('serialNumber', 'Serial Number is invalid. Only alphanumeric characters allowed').trim().isLength({ min: 1 }).matches(/^[A-Za-z1-9]+$/).escape(),
@@ -74,7 +74,7 @@ exports.pipe_create_post = [
         // Extract the validation errors from a request.
         const errors = validationResult(req);
         
-        var newPipe = new Pipe({
+        var newsample = new sample({
             serialNumber: req.body.serialNumber,
             manufacturedDate: req.body.manufacturedDate,
             manufacturer: req.body.manufacturer,
@@ -82,19 +82,19 @@ exports.pipe_create_post = [
             owner: req.body.owner
         });
   
-        console.log(newPipe);
+        console.log(newsample);
         if (!errors.isEmpty()) {
             // There are errors. Render form again with sanitized values and error messages.
-            res.render('pipe_form', { title: 'Create Pipe', pipe: newPipe, errors: errors.array()});
+            res.render('sample_form', { title: 'Create sample', sample: newsample, errors: errors.array()});
             return;
         }
         else {
   
             // Data from form is valid.
-            newPipe.save(function (err) {
+            newsample.save(function (err) {
                 if (err) { return next(err); }
                    // Successful - redirect to new record.
-                   res.redirect('/pipelist');
+                   res.redirect('/samplelist');
                 });
         }
     }
