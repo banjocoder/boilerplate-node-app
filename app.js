@@ -8,18 +8,18 @@ var compression = require('compression');
 var fileUpload = require('express-fileupload');
 
 const multer = require("multer");
-var mongoose = require('mongoose');
+//var mongoose = require('mongoose');
 
 var indexRouter = require('./routes/index');
 
 var app = express();
 
 //Set up mongoose connection
-var dev_db_url = 'mongodb+srv://ben:Banj0man@cluster0.sagmb.mongodb.net/pipe_id?retryWrites=true&w=majority';
-var mongoDB = process.env.MONGODB_URI || dev_db_url;
-mongoose.connect(mongoDB, { useNewUrlParser: true , useUnifiedTopology: true});
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+//var dev_db_url = 'mongodb+srv://ben:Banj0man@cluster0.sagmb.mongodb.net/pipe_id?retryWrites=true&w=majority';
+//var mongoDB = process.env.MONGODB_URI || dev_db_url;
+//mongoose.connect(mongoDB, { useNewUrlParser: true , useUnifiedTopology: true});
+//var db = mongoose.connection;
+//db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 
 // view engine setup
