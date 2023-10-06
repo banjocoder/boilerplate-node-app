@@ -1,0 +1,22 @@
+extends layout
+
+block content
+  h4 Pipe Serial Number: #{data.pipe_item[0].serialNumber}
+  h4 Test Date: #{data.pipeTest_item.testDate_formatted}
+  if data.pipeTest_item.result == 'Pass'
+    h4 #[strong Result:] #[strong.text-success #{data.pipeTest_item.result}]
+  else 
+    h4 #[strong Result:] #[strong.text-danger #{data.pipeTest_item.result}]
+  div(style='margin-left:20px;margin-top:20px')
+  h4 Test Files 
+
+  table.table.table-striped.table-bordered
+    tr 
+      th Files
+  
+    each val in data.files
+      tr 
+        td 
+          a(href= data.pipeTest_item._id + '/file/' + val._id target='_blank') #{val.name}
+    else
+      p There are no tests files listed for this pipe.

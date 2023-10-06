@@ -1,0 +1,35 @@
+extends layout
+
+block content
+  h1=title
+
+  h3 Pipe: #{pipe.serialNumber}
+
+  form(method='POST' action='' encType="multipart/form-data")
+  
+    div.form-group
+      label(for='tester') Tester:
+      input#tester.form-control(type='text' placeholder='Pipe Tester' name='tester' required='true' value=(undefined===pipeTest ? '' : pipeTest.tester))
+    
+    div.form-group
+      label(for='testDate') Test Date:
+      input#testDate.form-control(type='date' name='testDate' required='true' value=(undefined===pipeTest ? '' : pipeTest.testDate))
+
+    div.form-group
+      label(for='result') Test Result:
+      select#result.form-control(type='select' placeholder='Select result' name='result' required='true')
+        option(value='Pass') Pass
+        option(value='Fail') Fail
+
+    div.form-group
+      label(for='pipeTestFile') Files:
+      input#pipeTestFile.form-control(type="file" class="form-control-file" name='pipeTestFiles' multiple)
+
+    input(id="pipeId" name="pipeId" type="hidden" value=pipe._id )
+
+    button.btn.btn-primary(type='submit' style='margin:10px 0') Submit
+
+  if errors
+    ul
+      for error in errors
+        li!= error.msg

@@ -1,0 +1,14 @@
+.sidebar-nav {
+  margin-top: 20px;
+  padding: 0;
+  list-style: none;
+}
+
+.navbar {
+  padding: 10px
+}
+
+table, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}

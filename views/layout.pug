@@ -1,0 +1,21 @@
+doctype html
+html(lang='en')
+  head
+    title= title
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    link(rel='stylesheet' href='/stylesheets/style.css')
+    link(rel='stylesheet' href='/css/bootstrap.min.css')
+  body
+    nav(class="navbar navbar-dark bg-dark")
+        a(href="#" class="navbar-brand") Texas Iron Trackers
+        ul(class='navbar-nav mr-auto')
+          li(class='nav-item')
+            a(href="/pipelist" class="nav-link") All Pipe
+    div(class='container-fluid')
+      div(class='row')
+        div(class='col-12')
+          block content
+    script(src='/jquery.min.js')
+    script(type="module" src='/lib/popper.js') 
+    script(src='/js/bootstrap.min.js') 
